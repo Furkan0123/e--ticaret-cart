@@ -1,0 +1,113 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <style>
+        body {
+            background-image: url("{% static 'img/antique-cafe-bg-01.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .payment-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.8); /* Şeffaf koyu arka plan */
+            color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            border-radius: 10px;
+        }
+
+        .payment-overlay h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .payment-overlay form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .payment-overlay input {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .payment-overlay input[type="text"] {
+            text-align: center;
+        }
+
+        .payment-overlay input[name="amount"] {
+            width: auto;
+        }
+
+        .payment-overlay button {
+            background-color: #ff9800;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .payment-overlay button:hover {
+            background-color: #f57c00;
+        }
+
+        .payment-overlay .btn-cancel,
+        .payment-overlay .btn-back {
+            margin-top: 20px;
+            background-color: #f57c00;
+            text-decoration: none;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 5px;
+            display: inline-block;
+            font-size: 16px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .payment-overlay .btn-cancel:hover,
+        .payment-overlay .btn-back:hover {
+            background-color: #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-overlay">
+        <h1>Payment Details</h1>
+        <form action="{% url 'payment' %}" method="post" id="payment-form">
+            {% csrf_token %}
+            <input type="number" name="amount" placeholder="Amount (in dollars)" required>
+            <input type="text" name="card_number" placeholder="Card Number" maxlength="11" pattern="\d*" required>
+            <input type="text" name="expiry_date" placeholder="Expiry Date (MM/YY)" maxlength="5" pattern="\d{2}/\d{2}" required>
+            <input type="text" name="cvc" placeholder="CVC" maxlength="3" pattern="\d{3}" required>
+            <input type="hidden" name="stripeToken" id="stripeToken">
+            <button type="submit">Pay Now</button>
+        </form>
+        <a href="{% url 'cart' %}" class="btn-cancel">Cancel</a>
+        <a href="{% url 'menu' %}" class="btn-back">Back to Menu</a>
+    </div>
+</body>
+</html>

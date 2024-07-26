@@ -1,0 +1,58 @@
+ {% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Menu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&family=Oswald:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}"> <!-- fontawesome -->
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tooplate-antique-cafe.css' %}">
+</head> 
+<body> 
+    <!-- Navigation Bar -->
+    <nav id="tm-nav" class="fixed w-full">
+        <div class="tm-container mx-auto px-2 md:py-6 text-right">
+            <button class="md:hidden py-2 px-2" id="menu-toggle"><i class="fas fa-2x fa-bars tm-text-gold"></i></button>
+            <ul class="mb-3 md:mb-0 text-2xl font-normal flex justify-end flex-col md:flex-row">
+                <li class="nav-item {% if request.path == '/' %} active {% endif %}">
+                    <a class="nav-link" href="{% url 'index' %}">Intro <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item {% if 'menu' in request.path %} active {% endif %}">
+                    <a class="nav-link" href="{% url 'menu' %}">Menu</a>
+                </li>
+                <li class="inline-block mb-4 mx-4"><a href="#about" class="tm-text-gold py-1 md:py-3 px-4">About</a></li>
+                <li class="inline-block mb-4 mx-4"><a href="#contact" class="tm-text-gold py-1 md:py-3 px-4">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Menu Section -->
+<div style="padding-top: 100px">
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+        {% for menu_item in menu_items %}
+        <div style="background-color: #f5f5f5; padding: 20px; border-radius: 10px; text-align: center;">
+            <img src="{% static 'img/menu-item-1.jpg' %}" alt="Image" style="width: 100%; border-radius: 10px;">
+            <h3>{{ menu_item.name }}</h3>
+            <div>S ${{ menu_item.price }}</div>
+            <form action="{% url 'add_to_cart' menu_item.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="mt-4 bg-green-500 text-white py-2 px-4 rounded-lg">Sepete Ekle</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>
+
+
+
+
+
